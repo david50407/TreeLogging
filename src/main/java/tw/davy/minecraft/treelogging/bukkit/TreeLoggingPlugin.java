@@ -46,7 +46,7 @@ public final class TreeLoggingPlugin extends JavaPlugin
       //   Player player = (Player) sender;
       //}
       sender.sendMessage("TreeLogging, Makes logging trees truely.");
-      sender.sendMessage("    Version: 0.1-SNAPSHOT");
+      sender.sendMessage("    Version: 0.1.0");
       return true;
     }
     return false;
