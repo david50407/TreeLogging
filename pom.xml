@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>tw.davy.minecraft</groupId>
+  <artifactId>TreeLogging</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <name>TreeLogging</name>
+  <description>Makes logging trees truely</description>
+  <url>http://mc.davy.tw/plugins/TreeLogging</url>
+
+  <scm>
+    <connection>scm:git:git@github.com:david50407/TreeLogging.git</connection>
+    <url>https://github.com/david50407/TreeLogging</url>
+    <developerConnection>scm:git:git@github.com:david50407/TreeLogging.git</developerConnection>
+  </scm>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/david50407/TreeLogging/issues</url>
+  </issueManagement>
+
+  <repositories>
+    <!-- Repository for Bukkit -->
+    <repository>
+      <id>bukkit-repo</id>
+      <url>http://repo.bukkit.org/content/groups/public</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <!-- Bukkit -->
+    <dependency>
+      <groupId>org.bukkit</groupId>
+      <artifactId>bukkit</artifactId>
+      <version>1.7.2-R0.2</version>
+    </dependency>
+  </dependencies>
+</project>

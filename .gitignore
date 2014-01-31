@@ -1,0 +1,13 @@
+dist/
+build/
+bin/
+release/
+docs/
+target/
+
+manifest.mf
+
+.classpath
+.project
+.settings
+.DS_Store
