@@ -102,7 +102,9 @@ public class TreeDetector
 
       Material relativeBlockType = relativeBlock.getType();
       if (relativeBlockType == Material.LEAVES
+        || relativeBlockType == Material.LEAVES_2
         || relativeBlockType == Material.LOG
+        || relativeBlockType == Material.LOG_2
         || relativeBlockType == Material.SNOW) {
         blocks.add(relativeBlock);
         retVal &= detectRecursively(plugin, source, relativeBlock, blocks, retVal);

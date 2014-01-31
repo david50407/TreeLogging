@@ -33,7 +33,14 @@ public class TreeDroper
     );
   }
 
-  public static boolean dropLeaveItems(Block block)
+  public static boolean dropTree(Block block)
+  {
+    return dropItem(block.getWorld(), block.getLocation(),
+      new ItemStack(block.getType(), 1, (short) 0, (byte)(block.getData() & 0x3))
+    );
+  }
+
+  public static boolean dropLeaf(Block block)
   {
     Random gen = new Random();
     final int maxItemsPerBlock = 3;
@@ -56,15 +63,33 @@ public class TreeDroper
         }
         else if (gen.nextDouble() * 100 <= 5.0)
         {
-          stack = new ItemStack(Material.LEAVES, 1, (short) 0,
-            (byte) (block.getData() & ~0x8)
-            );
+          if (block.getType() == Material.LEAVES)
+          {
+            stack = new ItemStack(Material.LEAVES, 1, (short) 0,
+              (byte) (block.getData() & ~0x8)
+              );
+          }
+          else // if (block.getType() == Material.LEAVES_2)
+          {
+            stack = new ItemStack(Material.LEAVES_2, 1, (short) 0,
+              (byte) (block.getData() & ~0x8)
+              );
+          }
         }
         else if (gen.nextDouble() * 100 <= 8.0)
         {
-          stack = new ItemStack(Material.SAPLING, 1, (short) 0,
-            (byte) (block.getData() & ~0x8)
-            );
+          if (block.getType() == Material.LEAVES)
+          {
+            stack = new ItemStack(Material.SAPLING, 1, (short) 0,
+              (byte) (block.getData() & ~0x8)
+              );
+          }
+          else // if (block.getType() == Material.LEAVES_2)
+          {
+            stack = new ItemStack(Material.SAPLING, 1, (short) 0,
+              (byte) ((block.getData() & ~0x8) + 4)
+              );
+          }
         }
 
         // If we have a stack, drop it

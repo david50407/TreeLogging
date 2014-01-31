@@ -23,18 +23,16 @@ public class TreeDestroyer
     for (Block block : blocks)
     {
       Material blockType = block.getType();
-      if (blockType == Material.LOG || blockType == Material.LEAVES)
+      if (blockType == Material.LEAVES || blockType == Material.LEAVES_2)
       {
-        if (blockType == Material.LEAVES)
-        {
-          // We have a leaves block, so drop the items may from leaves.
-          TreeDroper.dropLeaveItems(block);
-        }
-        else
-        {
-          // Only drop the block if it's a log.
-          TreeDroper.dropBlock(block);
-        }
+        // We have a leaves block, so drop the items may from leaves.
+        TreeDroper.dropLeaf(block);
+        block.setType(Material.AIR);
+      }
+      else if (blockType == Material.LOG || blockType == Material.LOG_2)
+      {
+        // Only drop the block if it's a log.
+        TreeDroper.dropTree(block);
         block.setType(Material.AIR);
       }
     }
