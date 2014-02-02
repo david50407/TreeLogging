@@ -15,7 +15,7 @@ import tw.davy.minecraft.treelogging.bukkit.listener.BlockListener;
  */
 public final class TreeLoggingPlugin extends JavaPlugin
 {
-  public static final Logger logger = Logger.getLogger("Minecraft.LyTreeHelper");
+  public static final Logger logger = Logger.getLogger("Minecraft.TreeLogging");
 
   /**
    * Called on plugin enable.
