@@ -16,7 +16,6 @@ import tw.davy.minecraft.treelogging.database.Database;
  */
 public final class TreeLoggingPlugin extends JavaPlugin
 {
-  public static final Logger logger = Logger.getLogger("Minecraft.TreeLogging");
   public Database database = null;
 
   /**
@@ -37,7 +36,7 @@ public final class TreeLoggingPlugin extends JavaPlugin
 
     this.database = new Database(this);
     (new BlockListener(this)).registerEvents();
-    logger.info("[TreeLogging] Enabled.");
+    getLogger().info("Enabled.");
   }
 
   /**
@@ -45,7 +44,7 @@ public final class TreeLoggingPlugin extends JavaPlugin
    */
   public void onDisable()
   {
-    logger.info("[TreeLogging] Disabled.");
+    getLogger().info("Disabled.");
   }
 
   /**
@@ -60,7 +59,7 @@ public final class TreeLoggingPlugin extends JavaPlugin
       //   Player player = (Player) sender;
       //}
       sender.sendMessage("TreeLogging, Makes logging trees truely.");
-      sender.sendMessage("    Version: 0.1.0");
+      sender.sendMessage("    Version: " + getDescription().getVersion());
       return true;
     }
     return false;

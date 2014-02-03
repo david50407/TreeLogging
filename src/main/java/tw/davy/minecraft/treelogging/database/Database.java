@@ -44,6 +44,7 @@ public class Database
     {
       e.printStackTrace();
     }
+    plugin.getLogger().info("Using SQlite as data storage.");
   }
 
   private void initTable()
