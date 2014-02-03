@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import tw.davy.minecraft.treelogging.bukkit.TreeLoggingPlugin;
+import tw.davy.minecraft.treelogging.bukkit.helper.TreeRecorder;
 
 /**
  * Detector for trees.
@@ -106,8 +107,15 @@ public class TreeDetector
         || relativeBlockType == Material.LOG
         || relativeBlockType == Material.LOG_2
         || relativeBlockType == Material.SNOW) {
-        blocks.add(relativeBlock);
-        retVal &= detectRecursively(plugin, source, relativeBlock, blocks, retVal);
+        if (TreeRecorder.contains(plugin, relativeBlock))
+        {
+          retVal &= false;
+        }
+        else
+        {
+          blocks.add(relativeBlock);
+          retVal &= detectRecursively(plugin, source, relativeBlock, blocks, retVal);
+        }
       } else if (!blocksToIgnore.contains(relativeBlockType)) {
         // skip checking if it's around start point
         if (!that.equals(source)) {
