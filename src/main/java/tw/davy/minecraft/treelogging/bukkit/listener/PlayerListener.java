@@ -51,10 +51,7 @@ public final class PlayerListener implements Listener
       ArrayList<Block> targetBlocks = TreeDetector.detect(plugin, clickedBlock, true);
       if (targetBlocks == null)
         return;
-      for (Block block : targetBlocks)
-      {
-        TreeRecorder.record(plugin, block);
-      }
+      TreeRecorder.record(plugin, targetBlocks);
       plugin.getLogger().info("Logged " + targetBlocks.size() + " block(s).");
       event.getPlayer().sendMessage(ChatColor.GREEN + "Logged " + targetBlocks.size() + " block(s).");
       event.setCancelled(true);

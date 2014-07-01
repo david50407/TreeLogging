@@ -144,12 +144,12 @@ public class TreeDetector
         else
         {
           blocks.add(relativeBlock);
-          retVal &= detectRecursively(plugin, source, relativeBlock, blocks, retVal);
+          retVal &= detectRecursively(plugin, source, relativeBlock, blocks, ignore, retVal);
         }
       } else if (!blocksToIgnore.contains(relativeBlockType)) {
         // skip checking if it's around start point
         if (!that.equals(source)) {
-          retVal &= false | ignore;
+          retVal &= false;
         }
       }
     }
@@ -172,16 +172,16 @@ public class TreeDetector
         if (relativeBlock.getType() == Material.LOG_2 
           && relativeBlock.getData() == 0) {
           if (TreeRecorder.contains(plugin, relativeBlock) && !ignore) {
-            retVal &= false | ignore;
+            retVal &= false;
           }
           else {
             blocks.add(relativeBlock);
-            retVal &= detectRecursively(plugin, source, relativeBlock, blocks, retVal);
+            retVal &= detectRecursively(plugin, source, relativeBlock, blocks, ignore, retVal);
           }
         }
       }
     }
-    return retVal;
+    return retVal || ignore;
   }
   private static boolean detectRecursively(TreeLoggingPlugin plugin, Block source,
     Block that, ArrayList<Block> blocks, boolean ignore)

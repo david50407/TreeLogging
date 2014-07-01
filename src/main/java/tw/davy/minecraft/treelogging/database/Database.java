@@ -87,6 +87,31 @@ public class Database
     }
     return true;
   }
+  public boolean updateRecords(List<Block> blocks)
+  {
+    try
+    {
+      PreparedStatement statement = preStatements.get(0);
+      for (Block block : blocks)
+      {
+        statement.setString(1, block.getWorld().getUID().toString());
+        statement.setInt(2, block.getX());
+        statement.setInt(3, block.getY());
+        statement.setInt(4, block.getZ());
+        statement.addBatch();
+      }
+      connection.setAutoCommit(false);
+      statement.executeBatch();
+      connection.setAutoCommit(true);
+      statement.clearParameters();
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+      return false;
+    }
+    return true;
+  }
 
   public boolean removeRecord(Block block)
   {
@@ -98,6 +123,31 @@ public class Database
       statement.setInt(3, block.getY());
       statement.setInt(4, block.getZ());
       statement.executeUpdate();
+      statement.clearParameters();
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+      return false;
+    }
+    return true;
+  }
+  public boolean removeRecords(List<Block> blocks)
+  {
+    try
+    {
+      PreparedStatement statement = preStatements.get(1);
+      for (Block block : blocks)
+      {
+        statement.setString(1, block.getWorld().getUID().toString());
+        statement.setInt(2, block.getX());
+        statement.setInt(3, block.getY());
+        statement.setInt(4, block.getZ());
+        statement.addBatch();
+      }
+      connection.setAutoCommit(false);
+      statement.executeBatch();
+      connection.setAutoCommit(true);
       statement.clearParameters();
     }
     catch (Exception e)

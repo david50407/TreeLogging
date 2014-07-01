@@ -37,6 +37,19 @@ public class TreeRecorder
     }
     return true;
   }
+  /**
+   * Record non-natural tree.
+   *
+   * @param plugin
+   *            The TreeLogging plugin
+   * @param blocks
+   *            The blocks
+   * @return
+   */
+  public static boolean record(TreeLoggingPlugin plugin, List<Block> blocks)
+  {
+    return plugin.database.updateRecords(blocks);
+  }
 
   /**
    * Remove the record from the given block.
@@ -58,6 +71,19 @@ public class TreeRecorder
       return plugin.database.removeRecord(block);
     }
     return true;
+  }
+  /**
+   * Remove the record from the given blocks.
+   *
+   * @param plugin
+   *            The TreeLogging plugin
+   * @param blocks
+   *            The blocks
+   * @return
+   */
+  public static boolean remove(TreeLoggingPlugin plugin, List<Block> blocks)
+  {
+    return plugin.database.removeRecords(blocks);
   }
 
   /**
