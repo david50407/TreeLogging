@@ -1,12 +1,19 @@
 name: TreeLogging
 main: tw.davy.minecraft.treelogging.bukkit.TreeLoggingPlugin
-version: 0.1.0
+version: 0.2.0
 authors:
     - Davy
 website: http://mc.davy.tw/plugins/TreeLogging
 description: Makes logging trees truely.
 commands:
     treelogging:
-        description: Display TreeLogging's infomations.
+        description: Display infomations of TreeLogging.
         usage: /<command>
         permissions: 'treelogging.commands.info'
+    tl:
+        description: Execute commands of TreeLogging.
+        usage: |
+            /<command> command
+            Command list:
+                recording: Enable/Disable recording protecting trees.
+        permissions: 'treelogging.commands.execute'

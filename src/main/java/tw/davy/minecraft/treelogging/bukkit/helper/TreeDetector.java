@@ -42,7 +42,39 @@ public class TreeDetector
     new Location(null, 0.0, -1.0, 0.0),
     new Location(null, 0.0, 0.0, -1.0)
   );
+  private static List<Location> locationsToDetectForAcacia = Arrays.asList(
+    new Location(null, 1.0, 1.0, 0.0),
+    new Location(null, -1.0, 1.0, 0.0),
+    new Location(null, 0.0, 1.0, 1.0),
+    new Location(null, 0.0, 1.0, -1.0),
+    new Location(null, 1.0, -1.0, 0.0),
+    new Location(null, -1.0, -1.0, 0.0),
+    new Location(null, 0.0, -1.0, 1.0),
+    new Location(null, 0.0, -1.0, -1.0)
+  );
 
+  /**
+   * Detect the tree from the given source block and return all blocks of
+   * the tree.
+   *
+   * @see detectRecursively()
+   *
+   * @param plugin
+   *            The TreeLogging plugin
+   * @param source
+   *            The source block (in normal case the destroyed block)
+   * @param igonre
+   *            Ignore detect failed, return blocks forcely.
+   * @return Blocks of the tree, null for not a tree.
+   */
+  public static ArrayList<Block> detect(TreeLoggingPlugin plugin, Block source, boolean ignore)
+  {
+    ArrayList<Block> blocks = new ArrayList<Block>();
+
+    boolean returned = detectRecursively(plugin, source, source, blocks, ignore);
+
+    return returned ? blocks : null;
+  }
   /**
    * Detect the tree from the given source block and return all blocks of
    * the tree.
@@ -57,11 +89,7 @@ public class TreeDetector
    */
   public static ArrayList<Block> detect(TreeLoggingPlugin plugin, Block source)
   {
-    ArrayList<Block> blocks = new ArrayList<Block>();
-
-    boolean returned = detectRecursively(plugin, source, source, blocks);
-
-    return returned ? blocks : null;
+    return detect(plugin, source, false);
   }
 
   /**
@@ -74,16 +102,18 @@ public class TreeDetector
    *            The source block
    * @param that
    *            The block need to check
+   * @param igonre
+   *            Ignore detect failed, return blocks forcely.
    * @return
    */
   private static boolean detectRecursively(TreeLoggingPlugin plugin, Block source,
-    Block that, ArrayList<Block> blocks, boolean retVal)
+    Block that, ArrayList<Block> blocks, boolean ignore, boolean retVal)
   {
-    if (blocks.size() > 500)
+    if (blocks.size() > 1500)
     {
       return retVal;
     }
-    if (!checkRadius(25, that, source))
+    if (!checkRadius(50, that, source))
     {
       return retVal;
     }
@@ -107,7 +137,7 @@ public class TreeDetector
         || relativeBlockType == Material.LOG
         || relativeBlockType == Material.LOG_2
         || relativeBlockType == Material.SNOW) {
-        if (TreeRecorder.contains(plugin, relativeBlock))
+        if (TreeRecorder.contains(plugin, relativeBlock) && !ignore)
         {
           retVal &= false;
         }
@@ -119,16 +149,44 @@ public class TreeDetector
       } else if (!blocksToIgnore.contains(relativeBlockType)) {
         // skip checking if it's around start point
         if (!that.equals(source)) {
-          retVal &= false;
+          retVal &= false | ignore;
+        }
+      }
+    }
+    // Locations for Acacia
+    if (that.getType() == Material.LOG_2 && that.getData() == 0)
+    {
+      for (Location location : locationsToDetectForAcacia)
+      {
+        Block relativeBlock = that.getRelative(
+          location.getBlockX(),
+          location.getBlockY(),
+          location.getBlockZ());
+        if (relativeBlock.equals(source)) {
+          continue;
+        }
+        if (blocks.contains(relativeBlock)) {
+          continue;
+        }
+
+        if (relativeBlock.getType() == Material.LOG_2 
+          && relativeBlock.getData() == 0) {
+          if (TreeRecorder.contains(plugin, relativeBlock) && !ignore) {
+            retVal &= false | ignore;
+          }
+          else {
+            blocks.add(relativeBlock);
+            retVal &= detectRecursively(plugin, source, relativeBlock, blocks, retVal);
+          }
         }
       }
     }
     return retVal;
   }
   private static boolean detectRecursively(TreeLoggingPlugin plugin, Block source,
-    Block that, ArrayList<Block> blocks)
+    Block that, ArrayList<Block> blocks, boolean ignore)
   {
-    return detectRecursively(plugin, source, that, blocks, true);
+    return detectRecursively(plugin, source, that, blocks, ignore, true);
   }
 
   private static boolean checkRadius(int maxRadius, Block that, Block source) {

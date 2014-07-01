@@ -6,7 +6,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import tw.davy.minecraft.treelogging.bukkit.StateManager;
+import tw.davy.minecraft.treelogging.bukkit.executor.TLCommandExecutor;
 import tw.davy.minecraft.treelogging.bukkit.listener.BlockListener;
+import tw.davy.minecraft.treelogging.bukkit.listener.PlayerListener;
 import tw.davy.minecraft.treelogging.database.Database;
 
 /**
@@ -17,6 +20,7 @@ import tw.davy.minecraft.treelogging.database.Database;
 public final class TreeLoggingPlugin extends JavaPlugin
 {
   public Database database = null;
+  public StateManager states;
 
   /**
    * Called on plugin enable.
@@ -35,7 +39,10 @@ public final class TreeLoggingPlugin extends JavaPlugin
     }
 
     this.database = new Database(this);
+    this.states = new StateManager(this);
     (new BlockListener(this)).registerEvents();
+    (new PlayerListener(this)).registerEvents();
+    getCommand("tl").setExecutor(new TLCommandExecutor(this));
     getLogger().info("Enabled.");
   }
 
