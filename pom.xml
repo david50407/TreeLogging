@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>tw.davy.minecraft</groupId>
   <artifactId>TreeLogging</artifactId>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
   <name>TreeLogging</name>
   <description>Makes logging trees truely</description>
   <url>http://mc.davy.tw/plugins/TreeLogging</url>
