@@ -11,34 +11,34 @@ import java.util.ArrayList;
  * @author Davy
  */
 public final class StateManager {
-    public TreeLoggingPlugin plugin = null;
-    public ArrayList<String> recordingList;
+    private TreeLoggingPlugin mPlugin = null;
+    private ArrayList<String> mRecordingList;
 
-    public StateManager(TreeLoggingPlugin plugin) {
-        this.plugin = plugin;
-        this.recordingList = new ArrayList<>();
+    public StateManager(final TreeLoggingPlugin plugin) {
+        this.mPlugin = plugin;
+        this.mRecordingList = new ArrayList<>();
     }
 
-    public void enableRecording(Player player) {
+    public void enableRecording(final Player player) {
         String uuid = player.getName();
-        recordingList.add(uuid);
+        mRecordingList.add(uuid);
         player.sendMessage(ChatColor.GREEN + "You are recording.");
-        plugin.getLogger().info("Enable recording for player: " + uuid);
+        mPlugin.getLogger().info("Enable recording for player: " + uuid);
     }
 
-    public void disableRecording(Player player) {
+    public void disableRecording(final Player player) {
         String uuid = player.getName();
-        recordingList.remove(uuid);
+        mRecordingList.remove(uuid);
         player.sendMessage(ChatColor.GREEN + "You are " + ChatColor.RED + "NOT" + ChatColor.GREEN + " recording.");
-        plugin.getLogger().info("Disable recording for player: " + uuid);
+        mPlugin.getLogger().info("Disable recording for player: " + uuid);
     }
 
-    public boolean isRecording(Player player) {
+    public boolean isRecording(final Player player) {
         String uuid = player.getName();
-        return recordingList.contains(uuid);
+        return mRecordingList.contains(uuid);
     }
 
-    public void toggleRecording(Player player) {
+    public void toggleRecording(final Player player) {
         if (isRecording(player))
             disableRecording(player);
         else

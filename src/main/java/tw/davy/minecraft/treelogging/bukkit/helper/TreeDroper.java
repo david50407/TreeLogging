@@ -14,24 +14,24 @@ import java.util.Random;
  * @author Davy
  */
 public class TreeDroper {
-    public static boolean dropItem(World world, Location loc, ItemStack stack) {
+    public static boolean dropItem(final World world, final Location loc, final ItemStack stack) {
         world.dropItemNaturally(loc, stack);
         return true;
     }
 
-    public static boolean dropBlock(Block block) {
+    public static boolean dropBlock(final Block block) {
         return dropItem(block.getWorld(), block.getLocation(),
                 new ItemStack(block.getType(), 1, (short) 0, block.getData())
         );
     }
 
-    public static boolean dropTree(Block block) {
+    public static boolean dropTree(final Block block) {
         return dropItem(block.getWorld(), block.getLocation(),
                 new ItemStack(block.getType(), 1, (short) 0, (byte) (block.getData() & 0x3))
         );
     }
 
-    public static boolean dropLeaf(Block block) {
+    public static boolean dropLeaf(final Block block) {
         Random gen = new Random();
         final int maxItemsPerBlock = 3;
 

@@ -19,29 +19,25 @@ import tw.davy.minecraft.treelogging.bukkit.helper.TreeRecorder;
  * @author Davy
  */
 public final class PlayerListener implements Listener {
-    private final TreeLoggingPlugin plugin;
+    private final TreeLoggingPlugin mPlugin;
 
-    public PlayerListener(TreeLoggingPlugin plugin) {
-        this.plugin = plugin;
-    }
-
-    public void registerEvents() {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    public PlayerListener(final TreeLoggingPlugin plugin) {
+        mPlugin = plugin;
     }
 
     @EventHandler
-    public void playerInteract(PlayerInteractEvent event) {
-        if (event.isCancelled() || !plugin.states.isRecording(event.getPlayer())) {
+    public void playerInteract(final PlayerInteractEvent event) {
+        if (event.isCancelled() || !mPlugin.getStateManager().isRecording(event.getPlayer())) {
             return;
         }
 
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Block clickedBlock = event.getClickedBlock();
-            ArrayList<Block> targetBlocks = TreeDetector.detect(plugin, clickedBlock, true);
+            ArrayList<Block> targetBlocks = TreeDetector.detect(mPlugin, clickedBlock, true);
             if (targetBlocks == null)
                 return;
-            TreeRecorder.record(plugin, targetBlocks);
-            plugin.getLogger().info("Logged " + targetBlocks.size() + " block(s).");
+            TreeRecorder.record(mPlugin, targetBlocks);
+            mPlugin.getLogger().info("Logged " + targetBlocks.size() + " block(s).");
             event.getPlayer().sendMessage(ChatColor.GREEN + "Logged " + targetBlocks.size() + " block(s).");
             event.setCancelled(true);
         }

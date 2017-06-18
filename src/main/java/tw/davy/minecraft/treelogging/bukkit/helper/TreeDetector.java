@@ -54,14 +54,14 @@ public class TreeDetector {
      * Detect the tree from the given source block and return all blocks of
      * the tree.
      *
-     * @param plugin The TreeLogging plugin
+     * @param plugin The TreeLogging mPlugin
      * @param source The source block (in normal case the destroyed block)
      * @param igonre Ignore detect failed, return blocks forcely.
      * @return Blocks of the tree, null for not a tree.
      *
      * @see detectRecursively()
      */
-    public static ArrayList<Block> detect(TreeLoggingPlugin plugin, Block source, boolean ignore) {
+    public static ArrayList<Block> detect(final TreeLoggingPlugin plugin, final Block source, final boolean ignore) {
         ArrayList<Block> blocks = new ArrayList<Block>();
 
         boolean returned = detectRecursively(plugin, source, source, blocks, ignore);
@@ -73,13 +73,13 @@ public class TreeDetector {
      * Detect the tree from the given source block and return all blocks of
      * the tree.
      *
-     * @param plugin The TreeLogging plugin
+     * @param plugin The TreeLogging mPlugin
      * @param source The source block (in normal case the destroyed block)
      * @return Blocks of the tree, null for not a tree.
      *
      * @see detectRecursively()
      */
-    public static ArrayList<Block> detect(TreeLoggingPlugin plugin, Block source) {
+    public static ArrayList<Block> detect(final TreeLoggingPlugin plugin, final Block source) {
         return detect(plugin, source, false);
     }
 
@@ -87,14 +87,15 @@ public class TreeDetector {
      * Detect the tree from the given source block using recursion and return
      * all the blocks.
      *
-     * @param plugin The TreeLogging plugin
+     * @param plugin The TreeLogging mPlugin
      * @param source The source block
      * @param that   The block need to check
      * @param igonre Ignore detect failed, return blocks forcely.
      * @return
      */
-    private static boolean detectRecursively(TreeLoggingPlugin plugin, Block source,
-                                             Block that, ArrayList<Block> blocks, boolean ignore, boolean retVal) {
+    private static boolean detectRecursively(final TreeLoggingPlugin plugin, final Block source,
+                                             final Block that, final ArrayList<Block> blocks,
+                                             final boolean ignore, boolean retVal) {
         if (blocks.size() > 1500) {
             return retVal;
         }
@@ -161,12 +162,13 @@ public class TreeDetector {
         return retVal || ignore;
     }
 
-    private static boolean detectRecursively(TreeLoggingPlugin plugin, Block source,
-                                             Block that, ArrayList<Block> blocks, boolean ignore) {
+    private static boolean detectRecursively(final TreeLoggingPlugin plugin, final Block source,
+                                             final Block that, final ArrayList<Block> blocks,
+                                             final boolean ignore) {
         return detectRecursively(plugin, source, that, blocks, ignore, true);
     }
 
-    private static boolean checkRadius(int maxRadius, Block that, Block source) {
+    private static boolean checkRadius(final int maxRadius, final Block that, final Block source) {
         if (maxRadius > 0) {
             if ((that.getX() <= source.getX() + maxRadius)
                     && (that.getX() >= source.getX() - maxRadius)

@@ -19,38 +19,34 @@ import tw.davy.minecraft.treelogging.bukkit.helper.TreeRecorder;
  * @author Davy
  */
 public final class BlockListener implements Listener {
-    private final TreeLoggingPlugin plugin;
+    private final TreeLoggingPlugin mPlugin;
 
-    public BlockListener(TreeLoggingPlugin plugin) {
-        this.plugin = plugin;
-    }
-
-    public void registerEvents() {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    public BlockListener(final TreeLoggingPlugin plugin) {
+        mPlugin = plugin;
     }
 
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
+    public void onBlockBreak(final BlockBreakEvent event) {
         if (event.isCancelled()) {
             return;
         }
 
         Block block = event.getBlock();
-        TreeRecorder.remove(plugin, block);
-        ArrayList<Block> targetBlocks = TreeDetector.detect(plugin, block);
+        TreeRecorder.remove(mPlugin, block);
+        ArrayList<Block> targetBlocks = TreeDetector.detect(mPlugin, block);
         if (targetBlocks != null) {
-            TreeDestroyer.destroy(plugin, targetBlocks);
+            TreeDestroyer.destroy(mPlugin, targetBlocks);
         }
     }
 
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
+    public void onBlockPlace(final BlockPlaceEvent event) {
         if (event.isCancelled()) {
             return;
         }
 
         if (event.getPlayer() != null) {
-            TreeRecorder.record(plugin, event.getBlockPlaced());
+            TreeRecorder.record(mPlugin, event.getBlockPlaced());
         }
     }
 }

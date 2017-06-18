@@ -14,26 +14,26 @@ import java.util.List;
 import tw.davy.minecraft.treelogging.bukkit.TreeLoggingPlugin;
 
 public class Database {
-    private final TreeLoggingPlugin plugin;
-    private Connection connection;
-    private final List<String> SqlStatements = Arrays.asList(
+    private final TreeLoggingPlugin mPlugin;
+    private Connection mConnection;
+    private static final List<String> sSqlStatements = Arrays.asList(
             "REPLACE INTO record (world, x, y, z) VALUES (?, ?, ?, ?)",
             "DELETE FROM record WHERE `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?",
             "SELECT * FROM record WHERE `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?"
     );
-    private List<PreparedStatement> preStatements = new ArrayList<PreparedStatement>();
+    private List<PreparedStatement> mPreparedStatements = new ArrayList<PreparedStatement>();
 
     public Database(TreeLoggingPlugin plugin) {
-        this.plugin = plugin;
+        this.mPlugin = plugin;
 
         try {
             String database = "jdbc:sqlite:" + plugin.getDataFolder().getCanonicalPath() + "/treelogging.sqlite3";
             Class.forName("org.sqlite.JDBC");
-            this.connection = DriverManager.getConnection(database);
+            this.mConnection = DriverManager.getConnection(database);
 
             initTable();
-            for (String sql : SqlStatements) {
-                preStatements.add(this.connection.prepareStatement(sql));
+            for (String sql : sSqlStatements) {
+                mPreparedStatements.add(this.mConnection.prepareStatement(sql));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,7 +43,7 @@ public class Database {
 
     private void initTable() {
         try {
-            Statement statement = connection.createStatement();
+            Statement statement = mConnection.createStatement();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS record (" +
                     "world STRING NOT NULL, " +
                     "x INTEGER NOT NULL, " +
@@ -60,7 +60,7 @@ public class Database {
 
     public boolean updateRecord(Block block) {
         try {
-            PreparedStatement statement = preStatements.get(0);
+            PreparedStatement statement = mPreparedStatements.get(0);
             statement.setString(1, block.getWorld().getUID().toString());
             statement.setInt(2, block.getX());
             statement.setInt(3, block.getY());
@@ -76,7 +76,7 @@ public class Database {
 
     public boolean updateRecords(List<Block> blocks) {
         try {
-            PreparedStatement statement = preStatements.get(0);
+            PreparedStatement statement = mPreparedStatements.get(0);
             for (Block block : blocks) {
                 statement.setString(1, block.getWorld().getUID().toString());
                 statement.setInt(2, block.getX());
@@ -84,9 +84,9 @@ public class Database {
                 statement.setInt(4, block.getZ());
                 statement.addBatch();
             }
-            connection.setAutoCommit(false);
+            mConnection.setAutoCommit(false);
             statement.executeBatch();
-            connection.setAutoCommit(true);
+            mConnection.setAutoCommit(true);
             statement.clearParameters();
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,7 +97,7 @@ public class Database {
 
     public boolean removeRecord(Block block) {
         try {
-            PreparedStatement statement = preStatements.get(1);
+            PreparedStatement statement = mPreparedStatements.get(1);
             statement.setString(1, block.getWorld().getUID().toString());
             statement.setInt(2, block.getX());
             statement.setInt(3, block.getY());
@@ -113,7 +113,7 @@ public class Database {
 
     public boolean removeRecords(List<Block> blocks) {
         try {
-            PreparedStatement statement = preStatements.get(1);
+            PreparedStatement statement = mPreparedStatements.get(1);
             for (Block block : blocks) {
                 statement.setString(1, block.getWorld().getUID().toString());
                 statement.setInt(2, block.getX());
@@ -121,9 +121,9 @@ public class Database {
                 statement.setInt(4, block.getZ());
                 statement.addBatch();
             }
-            connection.setAutoCommit(false);
+            mConnection.setAutoCommit(false);
             statement.executeBatch();
-            connection.setAutoCommit(true);
+            mConnection.setAutoCommit(true);
             statement.clearParameters();
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,7 +134,7 @@ public class Database {
 
     public boolean hasRecord(Block block) {
         try {
-            PreparedStatement statement = preStatements.get(2);
+            PreparedStatement statement = mPreparedStatements.get(2);
             statement.setString(1, block.getWorld().getUID().toString());
             statement.setInt(2, block.getX());
             statement.setInt(3, block.getY());

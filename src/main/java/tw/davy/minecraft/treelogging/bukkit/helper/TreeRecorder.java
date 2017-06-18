@@ -16,17 +16,17 @@ public class TreeRecorder {
     /**
      * Record non-natural tree.
      *
-     * @param plugin The TreeLogging plugin
+     * @param plugin The TreeLogging mPlugin
      * @param block  The block
      * @return
      */
-    public static boolean record(TreeLoggingPlugin plugin, Block block) {
+    public static boolean record(final TreeLoggingPlugin plugin, final Block block) {
         Material blockType = block.getType();
         if (blockType == Material.LEAVES
                 || blockType == Material.LEAVES_2
                 || blockType == Material.LOG
                 || blockType == Material.LOG_2) {
-            return plugin.database.updateRecord(block);
+            return plugin.getRecords().updateRecord(block);
         }
         return true;
     }
@@ -34,28 +34,28 @@ public class TreeRecorder {
     /**
      * Record non-natural tree.
      *
-     * @param plugin The TreeLogging plugin
+     * @param plugin The TreeLogging mPlugin
      * @param blocks The blocks
      * @return
      */
-    public static boolean record(TreeLoggingPlugin plugin, List<Block> blocks) {
-        return plugin.database.updateRecords(blocks);
+    public static boolean record(final TreeLoggingPlugin plugin, final List<Block> blocks) {
+        return plugin.getRecords().updateRecords(blocks);
     }
 
     /**
      * Remove the record from the given block.
      *
-     * @param plugin The TreeLogging plugin
+     * @param plugin The TreeLogging mPlugin
      * @param block  The block
      * @return
      */
-    public static boolean remove(TreeLoggingPlugin plugin, Block block) {
+    public static boolean remove(final TreeLoggingPlugin plugin, final Block block) {
         Material blockType = block.getType();
         if (blockType == Material.LEAVES
                 || blockType == Material.LEAVES_2
                 || blockType == Material.LOG
                 || blockType == Material.LOG_2) {
-            return plugin.database.removeRecord(block);
+            return plugin.getRecords().removeRecord(block);
         }
         return true;
     }
@@ -63,22 +63,22 @@ public class TreeRecorder {
     /**
      * Remove the record from the given blocks.
      *
-     * @param plugin The TreeLogging plugin
+     * @param plugin The TreeLogging mPlugin
      * @param blocks The blocks
      * @return
      */
-    public static boolean remove(TreeLoggingPlugin plugin, List<Block> blocks) {
-        return plugin.database.removeRecords(blocks);
+    public static boolean remove(final TreeLoggingPlugin plugin, final List<Block> blocks) {
+        return plugin.getRecords().removeRecords(blocks);
     }
 
     /**
      * Find out the given block is non-natural or not.
      *
-     * @param plugin The TreeLogging plugin
+     * @param plugin The TreeLogging mPlugin
      * @param block  The block
      * @return
      */
-    public static boolean contains(TreeLoggingPlugin plugin, Block block) {
-        return plugin.database.hasRecord(block);
+    public static boolean contains(final TreeLoggingPlugin plugin, final Block block) {
+        return plugin.getRecords().hasRecord(block);
     }
 }

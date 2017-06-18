@@ -13,7 +13,7 @@ import tw.davy.minecraft.treelogging.bukkit.TreeLoggingPlugin;
  * @author Davy
  */
 public class TreeDestroyer {
-    public static boolean destroy(TreeLoggingPlugin plugin, ArrayList<Block> blocks) {
+    public static boolean destroy(final TreeLoggingPlugin plugin, final ArrayList<Block> blocks) {
         for (Block block : blocks) {
             Material blockType = block.getType();
             if (blockType == Material.LEAVES || blockType == Material.LEAVES_2) {

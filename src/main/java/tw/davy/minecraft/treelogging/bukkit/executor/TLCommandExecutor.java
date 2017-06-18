@@ -13,14 +13,14 @@ import tw.davy.minecraft.treelogging.bukkit.TreeLoggingPlugin;
  * @author Davy
  */
 public class TLCommandExecutor implements CommandExecutor {
-    private TreeLoggingPlugin plugin;
+    private TreeLoggingPlugin mPlugin;
 
-    public TLCommandExecutor(TreeLoggingPlugin plugin) {
-        this.plugin = plugin;
+    public TLCommandExecutor(final TreeLoggingPlugin plugin) {
+        mPlugin = plugin;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
         if (cmd.getName().equalsIgnoreCase("tl")) {
             if (args.length == 0) {
                 sender.sendMessage("Not enough arguments!");
@@ -37,7 +37,7 @@ public class TLCommandExecutor implements CommandExecutor {
                         sender.sendMessage("You don't have permission");
                         return false;
                     }
-                    plugin.states.toggleRecording(player);
+                    mPlugin.getStateManager().toggleRecording(player);
                     return true;
                 }
             }
