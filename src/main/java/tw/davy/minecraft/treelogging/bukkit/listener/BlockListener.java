@@ -1,10 +1,13 @@
 package tw.davy.minecraft.treelogging.bukkit.listener;
 
+import org.bukkit.GameMode;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
 
 import java.util.ArrayList;
 
@@ -25,28 +28,28 @@ public final class BlockListener implements Listener {
         mPlugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onBlockBreak(final BlockBreakEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-
-        Block block = event.getBlock();
+        final Block block = event.getBlock();
         TreeRecorder.remove(mPlugin, block);
-        ArrayList<Block> targetBlocks = TreeDetector.detect(mPlugin, block);
-        if (targetBlocks != null) {
+
+        final Player crafter = event.getPlayer();
+        if (crafter != null && crafter.getGameMode() == GameMode.CREATIVE && crafter.isSneaking())
+            return;
+
+        final ArrayList<Block> targetBlocks = TreeDetector.detect(mPlugin, block);
+        if (targetBlocks != null)
             TreeDestroyer.destroy(mPlugin, targetBlocks);
-        }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onBlockPlace(final BlockPlaceEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-
-        if (event.getPlayer() != null) {
+        if (event.getPlayer() != null)
             TreeRecorder.record(mPlugin, event.getBlockPlaced());
-        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onLeavesDecay(final LeavesDecayEvent event) {
+        TreeRecorder.remove(mPlugin, event.getBlock());
     }
 }
