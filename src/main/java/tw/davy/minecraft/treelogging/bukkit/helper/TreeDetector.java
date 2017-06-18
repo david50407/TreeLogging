@@ -16,21 +16,6 @@ import tw.davy.minecraft.treelogging.bukkit.TreeLoggingPlugin;
  * @author Davy
  */
 public class TreeDetector {
-    private static List<Material> blocksToIgnore = Arrays.asList(
-            Material.AIR,
-            Material.SAPLING,
-            Material.RED_ROSE,
-            Material.YELLOW_FLOWER,
-            Material.BROWN_MUSHROOM,
-            Material.RED_MUSHROOM,
-            Material.LONG_GRASS,
-            Material.DEAD_BUSH,
-            Material.VINE,
-            Material.WEB,
-            Material.CACTUS,
-            Material.SUGAR_CANE_BLOCK
-    );
-
     private static List<Location> locationsToDetect = Arrays.asList(
             new Location(null, 1.0, 0.0, 0.0),
             new Location(null, 0.0, 1.0, 0.0),
@@ -90,7 +75,7 @@ public class TreeDetector {
      * @param plugin The TreeLogging mPlugin
      * @param source The source block
      * @param that   The block need to check
-     * @param igonre Ignore detect failed, return blocks forcely.
+     * @param ignore Ignore detect failed, return blocks forcely.
      * @return
      */
     private static boolean detectRecursively(final TreeLoggingPlugin plugin, final Block source,
@@ -127,7 +112,7 @@ public class TreeDetector {
                     blocks.add(relativeBlock);
                     retVal &= detectRecursively(plugin, source, relativeBlock, blocks, ignore, retVal);
                 }
-            } else if (!blocksToIgnore.contains(relativeBlockType)) {
+            } else if (!plugin.getIgnoredBlocks().contains(relativeBlockType)) {
                 // skip checking if it's around start point
                 if (!that.equals(source)) {
                     retVal &= false;

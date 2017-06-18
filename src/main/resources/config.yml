@@ -1,0 +1,19 @@
+ignoredBlocks:
+  - AIR
+  - SAPLING
+  - FLUIDS
+  - RAILS_RELATIVED
+  - REDSTONE_RELATIVED
+  - DOORS
+  - SIGNS
+  - PLANTS
+  - WEB
+  - TORCH
+  - FIRE
+  - LADDER
+  - SNOW
+  - PORTAL
+  - CAKE_BLOCK
+  - CARPET
+  - STANDING_BANNER
+  - WALL_BANNER
