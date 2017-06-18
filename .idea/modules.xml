@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/TreeLogging.iml" filepath="$PROJECT_DIR$/.idea/TreeLogging.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TreeLogging_main.iml" filepath="$PROJECT_DIR$/.idea/modules/TreeLogging_main.iml" group="TreeLogging" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TreeLogging_test.iml" filepath="$PROJECT_DIR$/.idea/modules/TreeLogging_test.iml" group="TreeLogging" />
+    </modules>
+  </component>
+</project>

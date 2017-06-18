@@ -1,0 +1,23 @@
+apply plugin: 'java'
+
+group = 'tw.davy.minecraft'
+version = '0.3.1'
+
+description = "TreeLogging"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+
+    maven {
+        name 'spigotmc-nexus'
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots'
+    }
+}
+dependencies {
+    compileClasspath 'org.bukkit:bukkit:1.11.2-R0.1-SNAPSHOT', {
+        ext { fatJarExclude = true }
+    }
+}
