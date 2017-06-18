@@ -2,7 +2,10 @@ package tw.davy.minecraft.treelogging.bukkit.helper;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.TreeSpecies;
 import org.bukkit.block.Block;
+import org.bukkit.material.MaterialData;
+import org.bukkit.material.Tree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,10 +44,10 @@ public class TreeDetector {
      *
      * @param plugin The TreeLogging mPlugin
      * @param source The source block (in normal case the destroyed block)
-     * @param igonre Ignore detect failed, return blocks forcely.
+     * @param ignore Ignore detect failed, return blocks forcely.
      * @return Blocks of the tree, null for not a tree.
      *
-     * @see detectRecursively()
+     * @see #detectRecursively(TreeLoggingPlugin, Block, Block, ArrayList, boolean, boolean)
      */
     public static ArrayList<Block> detect(final TreeLoggingPlugin plugin, final Block source, final boolean ignore) {
         ArrayList<Block> blocks = new ArrayList<Block>();
@@ -62,7 +65,7 @@ public class TreeDetector {
      * @param source The source block (in normal case the destroyed block)
      * @return Blocks of the tree, null for not a tree.
      *
-     * @see detectRecursively()
+     * @see #detectRecursively(TreeLoggingPlugin, Block, Block, ArrayList, boolean, boolean)
      */
     public static ArrayList<Block> detect(final TreeLoggingPlugin plugin, final Block source) {
         return detect(plugin, source, false);
@@ -76,36 +79,29 @@ public class TreeDetector {
      * @param source The source block
      * @param that   The block need to check
      * @param ignore Ignore detect failed, return blocks forcely.
-     * @return
+     *
+     * @return When {false}, block list is invalid.
      */
     private static boolean detectRecursively(final TreeLoggingPlugin plugin, final Block source,
                                              final Block that, final ArrayList<Block> blocks,
                                              final boolean ignore, boolean retVal) {
-        if (blocks.size() > 1500) {
+        if (blocks.size() > 1500 || !checkRadius(50, that, source))
             return retVal;
-        }
-        if (!checkRadius(50, that, source)) {
-            return retVal;
-        }
 
+        // Do some DFS magic :tada:
         for (Location location : locationsToDetect) {
-            Block relativeBlock = that.getRelative(
+            final Block relativeBlock = that.getRelative(
                     location.getBlockX(),
                     location.getBlockY(),
                     location.getBlockZ());
-            if (relativeBlock.equals(source)) {
+            if (relativeBlock.equals(source) || blocks.contains(relativeBlock))
                 continue;
-            }
-            if (blocks.contains(relativeBlock)) {
-                continue;
-            }
 
-            Material relativeBlockType = relativeBlock.getType();
+            final Material relativeBlockType = relativeBlock.getType();
             if (relativeBlockType == Material.LEAVES
                     || relativeBlockType == Material.LEAVES_2
                     || relativeBlockType == Material.LOG
-                    || relativeBlockType == Material.LOG_2
-                    || relativeBlockType == Material.SNOW) {
+                    || relativeBlockType == Material.LOG_2) {
                 if (TreeRecorder.contains(plugin, relativeBlock) && !ignore) {
                     retVal &= false;
                 } else {
@@ -114,27 +110,26 @@ public class TreeDetector {
                 }
             } else if (!plugin.getIgnoredBlocks().contains(relativeBlockType)) {
                 // skip checking if it's around start point
-                if (!that.equals(source)) {
+                if (!that.equals(source))
                     retVal &= false;
-                }
             }
         }
+
         // Locations for Acacia
-        if (that.getType() == Material.LOG_2 && that.getData() == 0) {
+        final MaterialData materialData = that.getState().getData();
+        if (materialData instanceof Tree &&
+                ((Tree) materialData).getSpecies() == TreeSpecies.ACACIA) {
             for (Location location : locationsToDetectForAcacia) {
-                Block relativeBlock = that.getRelative(
+                final Block relativeBlock = that.getRelative(
                         location.getBlockX(),
                         location.getBlockY(),
                         location.getBlockZ());
-                if (relativeBlock.equals(source)) {
+                final MaterialData relativeBlockMaterialData = relativeBlock.getState().getData();
+                if (relativeBlock.equals(source) || blocks.contains(relativeBlock))
                     continue;
-                }
-                if (blocks.contains(relativeBlock)) {
-                    continue;
-                }
 
-                if (relativeBlock.getType() == Material.LOG_2
-                        && relativeBlock.getData() == 0) {
+                if (relativeBlockMaterialData instanceof Tree &&
+                        ((Tree) relativeBlockMaterialData).getSpecies() == TreeSpecies.ACACIA) {
                     if (TreeRecorder.contains(plugin, relativeBlock) && !ignore) {
                         retVal &= false;
                     } else {

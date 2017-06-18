@@ -5,6 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Leaves;
+import org.bukkit.material.Sapling;
+import org.bukkit.material.Tree;
 
 import java.util.Random;
 
@@ -14,68 +17,53 @@ import java.util.Random;
  * @author Davy
  */
 public class TreeDroper {
-    public static boolean dropItem(final World world, final Location loc, final ItemStack stack) {
+    private static Random sRandom = new Random();
+
+    public static void dropItem(final World world, final Location loc, final ItemStack stack) {
         world.dropItemNaturally(loc, stack);
-        return true;
     }
 
-    public static boolean dropBlock(final Block block) {
-        return dropItem(block.getWorld(), block.getLocation(),
-                new ItemStack(block.getType(), 1, (short) 0, block.getData())
+    public static void dropBlock(final Block block) {
+        dropItem(block.getWorld(), block.getLocation(),
+                block.getState().getData().toItemStack(1)
         );
     }
 
-    public static boolean dropTree(final Block block) {
-        return dropItem(block.getWorld(), block.getLocation(),
-                new ItemStack(block.getType(), 1, (short) 0, (byte) (block.getData() & 0x3))
-        );
+    public static void dropTree(final Block block) {
+        if (!(block.getState().getData() instanceof Tree))
+            return;
+        final Tree materialData = (Tree) block.getState().getData();
+
+        dropItem(block.getWorld(), block.getLocation(),
+                new Tree(materialData.getSpecies()).toItemStack(1));
     }
 
-    public static boolean dropLeaf(final Block block) {
-        Random gen = new Random();
+    public static void dropLeaf(final Block block) {
         final int maxItemsPerBlock = 3;
 
+        if (!(block.getState().getData() instanceof Leaves))
+            return;
+
+        final Leaves materialData = (Leaves) block.getState().getData();
+
         for (int i = 0; i < maxItemsPerBlock; i++) {
-            int item = gen.nextInt(5);
+            final int item = sRandom.nextInt(5);
 
             // drop item rate
             if (item < 3) {
                 ItemStack stack = null;
-                if (gen.nextDouble() * 100 <= 1.0) {
+                if (sRandom.nextDouble() * 100 <= 1.0)
                     stack = new ItemStack(Material.APPLE, 1);
-                } else if (gen.nextDouble() * 100 <= 0.1) {
+                else if (sRandom.nextDouble() * 100 <= 0.1)
                     stack = new ItemStack(Material.GOLDEN_APPLE, 1);
-                } else if (gen.nextDouble() * 100 <= 5.0) {
-                    if (block.getType() == Material.LEAVES) {
-                        stack = new ItemStack(Material.LEAVES, 1, (short) 0,
-                                (byte) (block.getData() & ~0x8)
-                        );
-                    } else // if (block.getType() == Material.LEAVES_2)
-                    {
-                        stack = new ItemStack(Material.LEAVES_2, 1, (short) 0,
-                                (byte) (block.getData() & ~0x8)
-                        );
-                    }
-                } else if (gen.nextDouble() * 100 <= 8.0) {
-                    if (block.getType() == Material.LEAVES) {
-                        stack = new ItemStack(Material.SAPLING, 1, (short) 0,
-                                (byte) (block.getData() & ~0x8)
-                        );
-                    } else // if (block.getType() == Material.LEAVES_2)
-                    {
-                        stack = new ItemStack(Material.SAPLING, 1, (short) 0,
-                                (byte) ((block.getData() & ~0x8) + 4)
-                        );
-                    }
-                }
+                else if (sRandom.nextDouble() * 100 <= 5.0)
+                    stack = new Leaves(materialData.getSpecies()).toItemStack(1);
+                else if (sRandom.nextDouble() * 100 <= 8.0)
+                    stack = new Sapling(materialData.getSpecies()).toItemStack(1);
 
-                // If we have a stack, drop it
-                if (stack != null) {
+                if (stack != null)
                     dropItem(block.getWorld(), block.getLocation(), stack);
-                }
-                continue;
             }
         }
-        return true;
     }
 }

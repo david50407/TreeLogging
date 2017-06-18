@@ -18,17 +18,15 @@ public class TreeRecorder {
      *
      * @param plugin The TreeLogging mPlugin
      * @param block  The block
-     * @return
      */
-    public static boolean record(final TreeLoggingPlugin plugin, final Block block) {
+    public static void record(final TreeLoggingPlugin plugin, final Block block) {
         Material blockType = block.getType();
         if (blockType == Material.LEAVES
                 || blockType == Material.LEAVES_2
                 || blockType == Material.LOG
                 || blockType == Material.LOG_2) {
-            return plugin.getRecords().updateRecord(block);
+            plugin.getRecords().updateRecord(block);
         }
-        return true;
     }
 
     /**
@@ -36,10 +34,9 @@ public class TreeRecorder {
      *
      * @param plugin The TreeLogging mPlugin
      * @param blocks The blocks
-     * @return
      */
-    public static boolean record(final TreeLoggingPlugin plugin, final List<Block> blocks) {
-        return plugin.getRecords().updateRecords(blocks);
+    public static void record(final TreeLoggingPlugin plugin, final List<Block> blocks) {
+        plugin.getRecords().updateRecords(blocks);
     }
 
     /**
@@ -47,17 +44,15 @@ public class TreeRecorder {
      *
      * @param plugin The TreeLogging mPlugin
      * @param block  The block
-     * @return
      */
-    public static boolean remove(final TreeLoggingPlugin plugin, final Block block) {
+    public static void remove(final TreeLoggingPlugin plugin, final Block block) {
         Material blockType = block.getType();
         if (blockType == Material.LEAVES
                 || blockType == Material.LEAVES_2
                 || blockType == Material.LOG
                 || blockType == Material.LOG_2) {
-            return plugin.getRecords().removeRecord(block);
+            plugin.getRecords().removeRecord(block);
         }
-        return true;
     }
 
     /**
@@ -65,10 +60,9 @@ public class TreeRecorder {
      *
      * @param plugin The TreeLogging mPlugin
      * @param blocks The blocks
-     * @return
      */
-    public static boolean remove(final TreeLoggingPlugin plugin, final List<Block> blocks) {
-        return plugin.getRecords().removeRecords(blocks);
+    public static void remove(final TreeLoggingPlugin plugin, final List<Block> blocks) {
+        plugin.getRecords().removeRecords(blocks);
     }
 
     /**
@@ -76,7 +70,8 @@ public class TreeRecorder {
      *
      * @param plugin The TreeLogging mPlugin
      * @param block  The block
-     * @return
+     *
+     * @return {true} for record exists.
      */
     public static boolean contains(final TreeLoggingPlugin plugin, final Block block) {
         return plugin.getRecords().hasRecord(block);
