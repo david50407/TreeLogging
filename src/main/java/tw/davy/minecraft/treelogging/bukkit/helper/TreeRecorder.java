@@ -7,6 +7,8 @@ import java.util.List;
 
 import tw.davy.minecraft.treelogging.bukkit.TreeLoggingPlugin;
 
+import static tw.davy.minecraft.treelogging.bukkit.helper.MaterialChecker.isTree;
+
 /**
  * Recorder for non-natural trees.
  *
@@ -22,10 +24,7 @@ public class TreeRecorder {
      */
     public static boolean record(final TreeLoggingPlugin plugin, final Block block) {
         Material blockType = block.getType();
-        if (blockType == Material.LEAVES
-                || blockType == Material.LEAVES_2
-                || blockType == Material.LOG
-                || blockType == Material.LOG_2) {
+        if (isTree(blockType)) {
             return plugin.getRecords().updateRecord(block);
         }
         return true;
@@ -51,10 +50,7 @@ public class TreeRecorder {
      */
     public static boolean remove(final TreeLoggingPlugin plugin, final Block block) {
         Material blockType = block.getType();
-        if (blockType == Material.LEAVES
-                || blockType == Material.LEAVES_2
-                || blockType == Material.LOG
-                || blockType == Material.LOG_2) {
+        if (isTree(blockType)) {
             return plugin.getRecords().removeRecord(block);
         }
         return true;

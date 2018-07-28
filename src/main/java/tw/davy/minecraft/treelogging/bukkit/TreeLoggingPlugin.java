@@ -95,6 +95,14 @@ public final class TreeLoggingPlugin extends JavaPlugin {
                 Material.YELLOW_CARPET, Material.LIME_CARPET, Material.PINK_CARPET, Material.GRAY_CARPET,
                 Material.LIGHT_GRAY_CARPET, Material.CYAN_CARPET, Material.PURPLE_CARPET, Material.BLUE_CARPET,
                 Material.BROWN_CARPET, Material.GREEN_CARPET, Material.RED_CARPET, Material.BLACK_CARPET));
+        sMaterialAliases.put("WOODS", Arrays.asList(
+                Material.ACACIA_WOOD, Material.STRIPPED_ACACIA_WOOD,
+                Material.BIRCH_WOOD, Material.STRIPPED_BIRCH_WOOD,
+                Material.DARK_OAK_WOOD, Material.STRIPPED_DARK_OAK_WOOD,
+                Material.JUNGLE_WOOD, Material.STRIPPED_JUNGLE_WOOD,
+                Material.OAK_WOOD, Material.STRIPPED_OAK_WOOD,
+                Material.SPRUCE_WOOD, Material.STRIPPED_SPRUCE_WOOD
+        ));
     }
 
     private Database mDatabase;

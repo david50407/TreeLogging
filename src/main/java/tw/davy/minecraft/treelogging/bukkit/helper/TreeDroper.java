@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -14,20 +15,25 @@ import java.util.Random;
  * @author Davy
  */
 public class TreeDroper {
+    private static HashMap<Material, Material> sLeafToSaplingMap = new HashMap<>();
+
+    static {
+        sLeafToSaplingMap.put(Material.ACACIA_LEAVES, Material.ACACIA_SAPLING);
+        sLeafToSaplingMap.put(Material.BIRCH_LEAVES, Material.BIRCH_SAPLING);
+        sLeafToSaplingMap.put(Material.DARK_OAK_LEAVES, Material.DARK_OAK_SAPLING);
+        sLeafToSaplingMap.put(Material.JUNGLE_LEAVES, Material.JUNGLE_SAPLING);
+        sLeafToSaplingMap.put(Material.OAK_LEAVES, Material.OAK_SAPLING);
+        sLeafToSaplingMap.put(Material.SPRUCE_LEAVES, Material.SPRUCE_SAPLING);
+    }
+
     public static boolean dropItem(final World world, final Location loc, final ItemStack stack) {
         world.dropItemNaturally(loc, stack);
         return true;
     }
 
-    public static boolean dropBlock(final Block block) {
+    public static boolean dropLog(final Block block) {
         return dropItem(block.getWorld(), block.getLocation(),
-                new ItemStack(block.getType(), 1, (short) 0, block.getData())
-        );
-    }
-
-    public static boolean dropTree(final Block block) {
-        return dropItem(block.getWorld(), block.getLocation(),
-                new ItemStack(block.getType(), 1, (short) 0, (byte) (block.getData() & 0x3))
+                new ItemStack(block.getType(), 1)
         );
     }
 
@@ -46,27 +52,9 @@ public class TreeDroper {
                 } else if (gen.nextDouble() * 100 <= 0.1) {
                     stack = new ItemStack(Material.GOLDEN_APPLE, 1);
                 } else if (gen.nextDouble() * 100 <= 5.0) {
-                    if (block.getType() == Material.LEAVES) {
-                        stack = new ItemStack(Material.LEAVES, 1, (short) 0,
-                                (byte) (block.getData() & ~0x8)
-                        );
-                    } else // if (block.getType() == Material.LEAVES_2)
-                    {
-                        stack = new ItemStack(Material.LEAVES_2, 1, (short) 0,
-                                (byte) (block.getData() & ~0x8)
-                        );
-                    }
+                    stack = new ItemStack(block.getType(), 1);
                 } else if (gen.nextDouble() * 100 <= 8.0) {
-                    if (block.getType() == Material.LEAVES) {
-                        stack = new ItemStack(Material.SAPLING, 1, (short) 0,
-                                (byte) (block.getData() & ~0x8)
-                        );
-                    } else // if (block.getType() == Material.LEAVES_2)
-                    {
-                        stack = new ItemStack(Material.SAPLING, 1, (short) 0,
-                                (byte) ((block.getData() & ~0x8) + 4)
-                        );
-                    }
+                    stack = new ItemStack(sLeafToSaplingMap.get(block.getType()), 1);
                 }
 
                 // If we have a stack, drop it

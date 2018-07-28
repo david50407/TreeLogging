@@ -10,6 +10,9 @@ import java.util.List;
 
 import tw.davy.minecraft.treelogging.bukkit.TreeLoggingPlugin;
 
+import static tw.davy.minecraft.treelogging.bukkit.helper.MaterialChecker.isAcaciaTree;
+import static tw.davy.minecraft.treelogging.bukkit.helper.MaterialChecker.isTree;
+
 /**
  * Detector for trees.
  *
@@ -101,13 +104,9 @@ public class TreeDetector {
             }
 
             Material relativeBlockType = relativeBlock.getType();
-            if (relativeBlockType == Material.LEAVES
-                    || relativeBlockType == Material.LEAVES_2
-                    || relativeBlockType == Material.LOG
-                    || relativeBlockType == Material.LOG_2
-                    || relativeBlockType == Material.SNOW) {
+            if (isTree(relativeBlockType)) {
                 if (TreeRecorder.contains(plugin, relativeBlock) && !ignore) {
-                    retVal &= false;
+                    retVal = false;
                 } else {
                     blocks.add(relativeBlock);
                     retVal &= detectRecursively(plugin, source, relativeBlock, blocks, ignore, retVal);
@@ -115,12 +114,12 @@ public class TreeDetector {
             } else if (!plugin.getIgnoredBlocks().contains(relativeBlockType)) {
                 // skip checking if it's around start point
                 if (!that.equals(source)) {
-                    retVal &= false;
+                    retVal = false;
                 }
             }
         }
         // Locations for Acacia
-        if (that.getType() == Material.LOG_2 && that.getData() == 0) {
+        if (isAcaciaTree(that.getType())) {
             for (Location location : locationsToDetectForAcacia) {
                 Block relativeBlock = that.getRelative(
                         location.getBlockX(),
@@ -133,10 +132,9 @@ public class TreeDetector {
                     continue;
                 }
 
-                if (relativeBlock.getType() == Material.LOG_2
-                        && relativeBlock.getData() == 0) {
+                if (isAcaciaTree(relativeBlock.getType())) {
                     if (TreeRecorder.contains(plugin, relativeBlock) && !ignore) {
-                        retVal &= false;
+                        retVal = false;
                     } else {
                         blocks.add(relativeBlock);
                         retVal &= detectRecursively(plugin, source, relativeBlock, blocks, ignore, retVal);
@@ -155,14 +153,12 @@ public class TreeDetector {
 
     private static boolean checkRadius(final int maxRadius, final Block that, final Block source) {
         if (maxRadius > 0) {
-            if ((that.getX() <= source.getX() + maxRadius)
+            return (that.getX() <= source.getX() + maxRadius)
                     && (that.getX() >= source.getX() - maxRadius)
                     && (that.getZ() <= source.getZ() + maxRadius)
-                    && (that.getZ() >= source.getZ() - maxRadius)) {
-                return true;
-            }
-            return false;
+                    && (that.getZ() >= source.getZ() - maxRadius);
         }
+
         return true;
     }
 }
