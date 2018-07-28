@@ -17,7 +17,7 @@ repositories {
     }
 }
 dependencies {
-    compileClasspath 'org.bukkit:bukkit:1.11.2-R0.1-SNAPSHOT', {
+    compileClasspath 'org.bukkit:bukkit:1.13-R0.1-SNAPSHOT', {
         ext { fatJarExclude = true }
     }
 }

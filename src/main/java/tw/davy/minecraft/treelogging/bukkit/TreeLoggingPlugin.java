@@ -17,35 +17,84 @@ import tw.davy.minecraft.treelogging.bukkit.listener.PlayerListener;
 import tw.davy.minecraft.treelogging.database.Database;
 
 /**
- * The main class for TreeLogging as a Bukkit mPlugin.
+ * The main class for TreeLogging as a Bukkit Plugin.
  *
  * @author Davy
  */
 public final class TreeLoggingPlugin extends JavaPlugin {
-    static final HashMap<String, List<Material>> sMaterialAliases = new HashMap<>();
+    static private final HashMap<String, List<Material>> sMaterialAliases = new HashMap<>();
     static {
         sMaterialAliases.put("FLUIDS", Arrays.asList(
-                Material.WATER, Material.STATIONARY_WATER,
-                Material.LAVA, Material.STATIONARY_LAVA));
+                Material.WATER, Material.LAVA, Material.BUBBLE_COLUMN));
         sMaterialAliases.put("RAILS_RELATIVED", Arrays.asList(
-                Material.RAILS, Material.POWERED_RAIL, Material.DETECTOR_RAIL, Material.ACTIVATOR_RAIL));
+                Material.RAIL, Material.POWERED_RAIL, Material.DETECTOR_RAIL, Material.ACTIVATOR_RAIL));
         sMaterialAliases.put("REDSTONE_RELATIVED", Arrays.asList(
-                Material.PISTON_EXTENSION, Material.PISTON_MOVING_PIECE,
-                Material.REDSTONE_WIRE, Material.REDSTONE_TORCH_OFF, Material.REDSTONE_TORCH_ON,
-                Material.STONE_BUTTON, Material.WOOD_BUTTON,
+                Material.PISTON, Material.PISTON_HEAD, Material.STICKY_PISTON, Material.MOVING_PISTON,
+                Material.REDSTONE_WIRE, Material.REDSTONE_TORCH, Material.REDSTONE_WALL_TORCH,
+                Material.ACACIA_BUTTON, Material.BIRCH_BUTTON, Material.DARK_OAK_BUTTON, Material.JUNGLE_BUTTON,
+                Material.OAK_BUTTON, Material.SPRUCE_BUTTON, Material.STONE_BUTTON,
                 Material.TRIPWIRE_HOOK, Material.TRIPWIRE,
                 Material.LEVER));
         sMaterialAliases.put("DOORS", Arrays.asList(
-                Material.WOODEN_DOOR, Material.IRON_DOOR_BLOCK,
-                Material.TRAP_DOOR, Material.IRON_TRAPDOOR,
-                Material.SPRUCE_DOOR, Material.BIRCH_DOOR, Material.JUNGLE_DOOR, Material.ACACIA_DOOR, Material.DARK_OAK_DOOR));
+                Material.ACACIA_DOOR, Material.BIRCH_DOOR, Material.DARK_OAK_DOOR, Material.JUNGLE_DOOR,
+                Material.OAK_DOOR, Material.SPRUCE_DOOR, Material.IRON_DOOR,
+                Material.ACACIA_TRAPDOOR, Material.BIRCH_TRAPDOOR, Material.DARK_OAK_TRAPDOOR, Material.JUNGLE_TRAPDOOR,
+                Material.OAK_TRAPDOOR, Material.SPRUCE_TRAPDOOR, Material.IRON_TRAPDOOR));
         sMaterialAliases.put("SIGNS", Arrays.asList(
-                Material.SIGN_POST, Material.WALL_SIGN));
+                Material.SIGN, Material.WALL_SIGN));
+        sMaterialAliases.put("SAPLINGS", Arrays.asList(
+                Material.OAK_SAPLING, Material.SPRUCE_SAPLING, Material.BIRCH_SAPLING,
+                Material.JUNGLE_SAPLING, Material.ACACIA_SAPLING, Material.DARK_OAK_SAPLING));
         sMaterialAliases.put("PLANTS", Arrays.asList(
-                Material.LONG_GRASS, Material.DOUBLE_PLANT,
-                Material.DEAD_BUSH, Material.CROPS, Material.CACTUS, Material.VINE, Material.SUGAR_CANE_BLOCK,
-                Material.YELLOW_FLOWER, Material.RED_ROSE,
-                Material.BROWN_MUSHROOM, Material.RED_MUSHROOM));
+                Material.GRASS, Material.TALL_GRASS, Material.SEAGRASS, Material.TALL_SEAGRASS,
+                Material.SUNFLOWER, Material.LILAC, Material.LARGE_FERN, Material.ROSE_BUSH, Material.PEONY,
+                Material.DANDELION, Material.BLUE_ORCHID, Material.ALLIUM, Material.AZURE_BLUET, Material.RED_TULIP,
+                Material.ORANGE_TULIP, Material.WHITE_TULIP, Material.PINK_TULIP, Material.OXEYE_DAISY,
+                Material.DEAD_BUSH, Material.FERN, Material.CACTUS, Material.VINE, Material.SUGAR_CANE,
+                Material.PUMPKIN_SEEDS, Material.PUMPKIN_STEM,
+                Material.MELON_SEEDS, Material.MELON_STEM,
+                Material.BROWN_MUSHROOM, Material.RED_MUSHROOM, Material.MUSHROOM_STEM,
+                Material.WHEAT_SEEDS, Material.WHEAT,
+                Material.BEETROOT_SEEDS, Material.BEETROOT,
+                Material.LILY_PAD));
+        sMaterialAliases.put("FLOWER_POTS", Arrays.asList(
+                Material.FLOWER_POT,
+                Material.POTTED_POPPY, Material.POTTED_DANDELION, Material.POTTED_OAK_SAPLING,
+                Material.POTTED_SPRUCE_SAPLING, Material.POTTED_BIRCH_SAPLING, Material.POTTED_JUNGLE_SAPLING,
+                Material.POTTED_RED_MUSHROOM, Material.POTTED_BROWN_MUSHROOM, Material.POTTED_CACTUS,
+                Material.POTTED_DEAD_BUSH, Material.POTTED_FERN, Material.POTTED_ACACIA_SAPLING,
+                Material.POTTED_DARK_OAK_SAPLING, Material.POTTED_BLUE_ORCHID, Material.POTTED_ALLIUM,
+                Material.POTTED_AZURE_BLUET, Material.POTTED_RED_TULIP, Material.POTTED_ORANGE_TULIP,
+                Material.POTTED_WHITE_TULIP, Material.POTTED_PINK_TULIP, Material.POTTED_OXEYE_DAISY));
+        sMaterialAliases.put("SKULLS", Arrays.asList(
+                Material.SKELETON_SKULL, Material.SKELETON_WALL_SKULL,
+                Material.WITHER_SKELETON_SKULL, Material.WITHER_SKELETON_WALL_SKULL,
+                Material.ZOMBIE_HEAD, Material.ZOMBIE_WALL_HEAD,
+                Material.PLAYER_HEAD, Material.PLAYER_WALL_HEAD,
+                Material.CREEPER_HEAD, Material.CREEPER_WALL_HEAD,
+                Material.DRAGON_HEAD, Material.DRAGON_WALL_HEAD));
+        sMaterialAliases.put("BANNERS", Arrays.asList(
+                Material.WHITE_BANNER, Material.WHITE_WALL_BANNER,
+                Material.ORANGE_BANNER, Material.ORANGE_WALL_BANNER,
+                Material.MAGENTA_BANNER, Material.MAGENTA_WALL_BANNER,
+                Material.LIGHT_BLUE_BANNER, Material.LIGHT_BLUE_WALL_BANNER,
+                Material.YELLOW_BANNER, Material.YELLOW_WALL_BANNER,
+                Material.LIME_BANNER, Material.LIME_WALL_BANNER,
+                Material.PINK_BANNER, Material.PINK_WALL_BANNER,
+                Material.GRAY_BANNER, Material.GRAY_WALL_BANNER,
+                Material.LIGHT_GRAY_BANNER, Material.LIGHT_GRAY_WALL_BANNER,
+                Material.CYAN_BANNER, Material.CYAN_WALL_BANNER,
+                Material.PURPLE_BANNER, Material.PURPLE_WALL_BANNER,
+                Material.BLUE_BANNER, Material.BLUE_WALL_BANNER,
+                Material.BROWN_BANNER, Material.BROWN_WALL_BANNER,
+                Material.GREEN_BANNER, Material.GREEN_WALL_BANNER,
+                Material.RED_BANNER, Material.RED_WALL_BANNER,
+                Material.BLACK_BANNER, Material.BLACK_WALL_BANNER));
+        sMaterialAliases.put("CARPETS", Arrays.asList(
+                Material.WHITE_CARPET, Material.ORANGE_CARPET, Material.MAGENTA_CARPET, Material.LIGHT_BLUE_CARPET,
+                Material.YELLOW_CARPET, Material.LIME_CARPET, Material.PINK_CARPET, Material.GRAY_CARPET,
+                Material.LIGHT_GRAY_CARPET, Material.CYAN_CARPET, Material.PURPLE_CARPET, Material.BLUE_CARPET,
+                Material.BROWN_CARPET, Material.GREEN_CARPET, Material.RED_CARPET, Material.BLACK_CARPET));
     }
 
     private Database mDatabase;
