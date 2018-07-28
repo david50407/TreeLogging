@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group = 'tw.davy.minecraft'
-version = '0.5.0'
+version = '0.5.1'
 
 description = "TreeLogging"
 
