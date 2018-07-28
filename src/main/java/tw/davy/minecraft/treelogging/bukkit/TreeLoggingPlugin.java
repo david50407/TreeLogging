@@ -134,6 +134,11 @@ public final class TreeLoggingPlugin extends JavaPlugin {
      * Called on mPlugin disable.
      */
     public void onDisable() {
+        if (mDatabase != null) {
+            mDatabase.dispose();
+            mDatabase = null;
+        }
+
         getLogger().info("Disabled.");
     }
 
