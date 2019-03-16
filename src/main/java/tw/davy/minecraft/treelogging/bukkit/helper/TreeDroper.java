@@ -5,12 +5,13 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Leaves;
-import org.bukkit.material.Sapling;
-import org.bukkit.material.Tree;
 
 import java.util.HashMap;
 import java.util.Random;
+
+import static tw.davy.minecraft.treelogging.bukkit.helper.MaterialChecker.isJungleLeave;
+import static tw.davy.minecraft.treelogging.bukkit.helper.MaterialChecker.isLeaf;
+import static tw.davy.minecraft.treelogging.bukkit.helper.MaterialChecker.isOakLeave;
 
 /**
  * Detector for trees.
@@ -41,32 +42,29 @@ public class TreeDroper {
     }
 
     public static void dropLeaf(final Block block) {
-        final int maxItemsPerBlock = 3;
-
-        if (!(block.getState().getData() instanceof Leaves))
+        final Material material = block.getType();
+        if (!isLeaf(block.getType()))
             return;
 
-        final Leaves materialData = (Leaves) block.getState().getData();
+        // Leaves which decay or are destroyed without using shears usually drop nothing,
+        // but yield saplings 5% (1/20) of the time.
+        // Jungle leaves drop saplings 2.5% (1/40) of the time.
+        // Oak and dark oak leaves also have a 0.5% (1/200) chance of dropping an apple.
+        // ref: https://minecraft.gamepedia.com/Leaves
+        final int rate = sRandom.nextInt(1000);
 
-        for (int i = 0; i < maxItemsPerBlock; i++) {
-            final int item = sRandom.nextInt(5);
-
-            // drop item rate
-            if (item < 3) {
-                ItemStack stack = null;
-                if (sRandom.nextDouble() * 100 <= 1.0) {
-                    stack = new ItemStack(Material.APPLE, 1);
-                } else if (sRandom.nextDouble() * 100 <= 0.1) {
-                    stack = new ItemStack(Material.GOLDEN_APPLE, 1);
-                } else if (sRandom.nextDouble() * 100 <= 5.0) {
-                    stack = new ItemStack(block.getType(), 1);
-                } else if (sRandom.nextDouble() * 100 <= 8.0) {
-                    stack = new ItemStack(sLeafToSaplingMap.get(block.getType()), 1);
-                }
-
-                if (stack != null)
-                    dropItem(block.getWorld(), block.getLocation(), stack);
+        if (isJungleLeave(material)) {
+            if (rate % 40 == 0) { // 2.5% Sapling
+                dropItem(block.getWorld(), block.getLocation(),
+                        new ItemStack(sLeafToSaplingMap.get(block.getType()), 1));
             }
+        } else if (rate % 20 == 0) { // 5% Sapling
+            dropItem(block.getWorld(), block.getLocation(),
+                    new ItemStack(sLeafToSaplingMap.get(block.getType()), 1));
+        } else if (isOakLeave(material)
+                && rate % 200 == 1) { // 0.5% Apple
+            dropItem(block.getWorld(), block.getLocation(),
+                    new ItemStack(Material.APPLE, 1));
         }
     }
 }

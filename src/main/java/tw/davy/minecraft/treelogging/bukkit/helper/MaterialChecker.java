@@ -27,6 +27,14 @@ public class MaterialChecker {
         return material == Material.ACACIA_LOG || material == Material.STRIPPED_ACACIA_LOG;
     }
 
+    static public boolean isOakLeave(final Material material) {
+        return material == Material.OAK_LEAVES || material == Material.DARK_OAK_LEAVES;
+    }
+
+    static public boolean isJungleLeave(final Material material) {
+        return material == Material.JUNGLE_LEAVES;
+    }
+
     static public boolean isLog(final Material material) {
         return sLogMaterials.contains(material);
     }
