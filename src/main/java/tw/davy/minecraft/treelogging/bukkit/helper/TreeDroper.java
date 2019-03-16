@@ -9,6 +9,7 @@ import org.bukkit.material.Leaves;
 import org.bukkit.material.Sapling;
 import org.bukkit.material.Tree;
 
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -18,24 +19,25 @@ import java.util.Random;
  */
 public class TreeDroper {
     private static Random sRandom = new Random();
+    private static HashMap<Material, Material> sLeafToSaplingMap = new HashMap<>();
+
+    static {
+        sLeafToSaplingMap.put(Material.ACACIA_LEAVES, Material.ACACIA_SAPLING);
+        sLeafToSaplingMap.put(Material.BIRCH_LEAVES, Material.BIRCH_SAPLING);
+        sLeafToSaplingMap.put(Material.DARK_OAK_LEAVES, Material.DARK_OAK_SAPLING);
+        sLeafToSaplingMap.put(Material.JUNGLE_LEAVES, Material.JUNGLE_SAPLING);
+        sLeafToSaplingMap.put(Material.OAK_LEAVES, Material.OAK_SAPLING);
+        sLeafToSaplingMap.put(Material.SPRUCE_LEAVES, Material.SPRUCE_SAPLING);
+    }
 
     public static void dropItem(final World world, final Location loc, final ItemStack stack) {
         world.dropItemNaturally(loc, stack);
     }
 
-    public static void dropBlock(final Block block) {
+    public static void dropLog(final Block block) {
         dropItem(block.getWorld(), block.getLocation(),
-                block.getState().getData().toItemStack(1)
+                new ItemStack(block.getType(), 1)
         );
-    }
-
-    public static void dropTree(final Block block) {
-        if (!(block.getState().getData() instanceof Tree))
-            return;
-        final Tree materialData = (Tree) block.getState().getData();
-
-        dropItem(block.getWorld(), block.getLocation(),
-                new Tree(materialData.getSpecies()).toItemStack(1));
     }
 
     public static void dropLeaf(final Block block) {
@@ -52,14 +54,15 @@ public class TreeDroper {
             // drop item rate
             if (item < 3) {
                 ItemStack stack = null;
-                if (sRandom.nextDouble() * 100 <= 1.0)
+                if (sRandom.nextDouble() * 100 <= 1.0) {
                     stack = new ItemStack(Material.APPLE, 1);
-                else if (sRandom.nextDouble() * 100 <= 0.1)
+                } else if (sRandom.nextDouble() * 100 <= 0.1) {
                     stack = new ItemStack(Material.GOLDEN_APPLE, 1);
-                else if (sRandom.nextDouble() * 100 <= 5.0)
-                    stack = new Leaves(materialData.getSpecies()).toItemStack(1);
-                else if (sRandom.nextDouble() * 100 <= 8.0)
-                    stack = new Sapling(materialData.getSpecies()).toItemStack(1);
+                } else if (sRandom.nextDouble() * 100 <= 5.0) {
+                    stack = new ItemStack(block.getType(), 1);
+                } else if (sRandom.nextDouble() * 100 <= 8.0) {
+                    stack = new ItemStack(sLeafToSaplingMap.get(block.getType()), 1);
+                }
 
                 if (stack != null)
                     dropItem(block.getWorld(), block.getLocation(), stack);

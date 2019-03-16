@@ -2,13 +2,13 @@ package tw.davy.minecraft.treelogging.bukkit.helper;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.material.Leaves;
-import org.bukkit.material.MaterialData;
-import org.bukkit.material.Tree;
 
 import java.util.ArrayList;
 
 import tw.davy.minecraft.treelogging.bukkit.TreeLoggingPlugin;
+
+import static tw.davy.minecraft.treelogging.bukkit.helper.MaterialChecker.isLog;
+import static tw.davy.minecraft.treelogging.bukkit.helper.MaterialChecker.isLeaf;
 
 /**
  * Destroyer for trees.
@@ -18,14 +18,14 @@ import tw.davy.minecraft.treelogging.bukkit.TreeLoggingPlugin;
 public class TreeDestroyer {
     public static void destroy(final TreeLoggingPlugin plugin, final ArrayList<Block> blocks) {
         for (Block block : blocks) {
-            final MaterialData materialData = block.getState().getData();
-            if (materialData instanceof Leaves) {
+            final Material blockType = block.getType();
+            if (isLeaf(blockType)) {
                 // We have a leaves block, so drop the items may from leaves.
                 TreeDroper.dropLeaf(block);
                 block.setType(Material.AIR);
-            } else if (materialData instanceof Tree) {
+            } else if (isLog(blockType)) {
                 // Only drop the block if it's a log.
-                TreeDroper.dropTree(block);
+                TreeDroper.dropLog(block);
                 block.setType(Material.AIR);
             }
         }

@@ -11,9 +11,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import tw.davy.minecraft.treelogging.Disposable;
 import tw.davy.minecraft.treelogging.bukkit.TreeLoggingPlugin;
 
-public class Database {
+public class Database implements Disposable {
     private final TreeLoggingPlugin mPlugin;
     private Connection mConnection;
     private static final List<String> sSqlStatements = Arrays.asList(
@@ -39,6 +40,29 @@ public class Database {
             e.printStackTrace();
         }
         plugin.getLogger().info("Using SQlite as data storage.");
+    }
+
+    public void dispose() {
+        if (!isDisposed() && mConnection != null) {
+            try {
+                mConnection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean isDisposed() {
+        if (mConnection == null)
+            return false;
+
+        try {
+            return mConnection.isClosed();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     private void initTable() {
