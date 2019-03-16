@@ -1,6 +1,6 @@
 name: TreeLogging
 main: tw.davy.minecraft.treelogging.bukkit.TreeLoggingPlugin
-version: 0.5.1
+version: 0.6.0
 api-version: 1.13
 authors:
     - Davy
